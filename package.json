@@ -1,0 +1,44 @@
+{
+  "name": "project-dice",
+  "version": "1.0.0",
+  "description": "A website based on Atomic Shrimp's project dice idea",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "dev:server": "nodemon --exec babel-node server.js --ignore public/",
+    "dev:bundler": "webpack -w --mode=\"development\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hopthedog/project-dice.git"
+  },
+  "author": "Chris Evans chris@ctevans.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hopthedog/project-dice/issues"
+  },
+  "homepage": "https://github.com/hopthedog/project-dice#readme",
+  "dependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/node": "^7.14.2",
+    "@babel/preset-env": "^7.14.4",
+    "@babel/preset-react": "^7.13.13",
+    "axios": "^0.21.1",
+    "babel-loader": "^8.2.2",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.9",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.2"
+  },
+  "devDependencies": {
+    "babel-jest": "^27.0.2",
+    "jest": "^27.0.4",
+    "node-sass-middleware": "^0.11.0",
+    "nodemon": "^2.0.7",
+    "react-test-renderer": "^17.0.2"
+  }
+}
