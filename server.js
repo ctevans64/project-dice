@@ -1,10 +1,25 @@
 import express from 'express';
 import sassMiddleware from 'node-sass-middleware';
 import path from 'path';
-import serverRender from './serverRender';
+
+// Allow for server side rendering
+import React from 'react';
+import {
+    StaticRouter as Router,
+    Route,
+    Switch
+} from 'react-router-dom'
+import ReactDOMServer from 'react-dom/server';
+
+import Home from './src/components/pages/Home';
+
+import Header from './src/components/Header';
+
 
 import config from './config';
 import apiRouter from './api';
+import Create from './src/components/pages/Create';
+import Browse from './src/components/pages/Browse';
 
 const server = express();
 
@@ -23,8 +38,22 @@ server.use(sassMiddleware({
 }));
 
 
-server.get(['/', '/contest/:contestID'], (req, res) => {
-    const { initialMarkup, initialData } = serverRender();
+server.get(['/', '/create', '/browse', '/browse/:setId'], (req, res) => {
+    const initialData = {};
+    const initialMarkup = ReactDOMServer.renderToString(
+        <Router location={req.url}>
+            <div className="App">
+                <Header />
+                <div id="page-body" className="container">
+                    <Switch>
+                        <Route path="/" component={Home}  exact />
+                        <Route path="/create" component={Create} />
+                        <Route path="/browse" component={Browse} />
+                    </Switch>
+                </div>
+            </div>
+        </Router>
+      );
     res.render('index', {
         initialMarkup,
         initialData

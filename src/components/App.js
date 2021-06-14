@@ -1,31 +1,38 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch
+} from 'react-router-dom'
 
-import * as api from '../api';
+import Header from './Header';
+
+import Home from './pages/Home';
+import Create from "./pages/Create";
+import Browse from "./pages/Browse";
+import View from "./pages/View";
 
 class App extends React.Component {
-
-    static propTypes = {
-        initialData: PropTypes.object.isRequired,
-    }
-
-    state = this.props.initialData;
-
-    componentDidMount() {
-        // Start any timeouts
-    }
-
-    componentWillUnmount() {
-        // End any timeouts
-    }
-
-
-    render() {
+    render () {
         return (
-            <div className="App">
-                <h1>Hello</h1>
-                <p>This is the start of the app.</p>
-            </div>
+            <Router>
+                <div className="App">
+                    <Header />
+                    <div id="page-body" className="container">
+                        <Switch>
+                            <Route path="/" exact >
+                                <Home />
+                            </Route>
+                            <Route path="/create" >
+                                <Create />
+                            </Route>
+                            <Route path="/browse">
+                                <Browse />
+                            </Route>
+                        </Switch>
+                    </div>
+                </div>
+            </Router>
         );
     }
 }

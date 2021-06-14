@@ -8,9 +8,9 @@ import config from './config';
 const serverRender = () => {
     const initialData = {};
     return {
-        initialMarkup: ReactDOMServer.renderToString(<App initialData={initialData} />),
+        initialMarkup:  ReactDOMServer.renderToString(<App initialData={initialData} />),
         initialData
-    }
+    };
 };
 
 export default serverRender;
