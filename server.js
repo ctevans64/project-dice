@@ -4,27 +4,45 @@ import path from 'path';
 
 // Allow for server side rendering
 import React from 'react';
-import {
-    StaticRouter as Router,
-    Route,
-    Switch
-} from 'react-router-dom'
 import ReactDOMServer from 'react-dom/server';
-
-import Home from './src/components/pages/Home';
-
-import Header from './src/components/Header';
+import AppServer from './src/components/AppServer';
 
 
 import config from './config';
 import apiRouter from './api';
-import Create from './src/components/pages/Create';
-import Browse from './src/components/pages/Browse';
 
+var session = require('express-session');
 const server = express();
+
+var MongoDBStore = require('connect-mongodb-session')(session);
+var store = new MongoDBStore({
+    uri: config.mongodbUri,
+    collection: 'mySessions'
+});
+
+// Catch errors
+store.on('error', function(error) {
+    console.log(error);
+});
 
 // Tell Express to use EJS for template language
 server.set('view engine', 'ejs');
+
+// Use standard session handling
+server.use(session({
+    secret: 'project-dice-secret',
+    name: 'project-dice-secret-name',
+    cookie: {
+        //httpOnly: true,
+        //secure: true,
+        sameSite: true,
+        maxAge: 1 * 60 * 60 * 1000 //Time out session after 1 hour
+    },
+    store: store,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 // Request bodies are treated as JSON
 server.use(express.json());
@@ -38,21 +56,16 @@ server.use(sassMiddleware({
 }));
 
 
-server.get(['/', '/create', '/browse', '/browse/:setId'], (req, res) => {
-    const initialData = {};
+server.get(['/', '/create', '/browse', '/browse/:id'], (req, res) => {
+    //Default set that shows on session create
+    if(!req.session.create){
+        req.session.create = config.invention
+    }
+    const initialData = {
+        create: req.session.create
+    };
     const initialMarkup = ReactDOMServer.renderToString(
-        <Router location={req.url}>
-            <div className="App">
-                <Header />
-                <div id="page-body" className="container">
-                    <Switch>
-                        <Route path="/" component={Home}  exact />
-                        <Route path="/create" component={Create} />
-                        <Route path="/browse" component={Browse} />
-                    </Switch>
-                </div>
-            </div>
-        </Router>
+        <AppServer url={req.url} create={req.session.create}/>
       );
     res.render('index', {
         initialMarkup,

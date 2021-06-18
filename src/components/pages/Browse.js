@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 class Browse extends React.Component {
 
@@ -12,9 +13,11 @@ class Browse extends React.Component {
 
 
     render() {
+        console.log(this.props);
         return (
             <div className="Browse">
                 <p>Browse content here</p>
+                <Link to="/browse/60cd02c756a631410420e420">60cd02c756a631410420e420</Link>
             </div>
         );
     }

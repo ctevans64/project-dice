@@ -2,19 +2,12 @@ import React from 'react';
 
 class View extends React.Component {
 
-    componentDidMount() {
-        // Start any timeouts
-    }
-
-    componentWillUnmount() {
-        // End any timeouts
-    }
-
 
     render() {
+        let _id = this.props.match.params.id;
         return (
             <div className="View">
-                <p>View content here</p>
+                <p>View content here: {_id}</p>
             </div>
         );
     }

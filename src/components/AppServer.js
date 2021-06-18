@@ -1,10 +1,9 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import {
-    BrowserRouter as Router,
+    StaticRouter as Router,
     Route,
-    Switch,
-    URLSearchParams,
-    useLocation
+    Switch
 } from 'react-router-dom'
 
 import Header from './Header';
@@ -14,15 +13,7 @@ import Create from "./pages/Create";
 import Browse from "./pages/Browse";
 import View from "./pages/View";
 
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-  }
-
-class App extends React.Component {
-
-    state = {
-        create: initialData.create
-    }
+class AppServer extends React.Component {
 
     updateCreateSet = (set) => {
         this.setState({
@@ -32,7 +23,7 @@ class App extends React.Component {
 
     render () {
         return (
-            <Router>
+            <Router location={this.props.url}>
                 <div className="App">
                     <Header />
                     <div id="page-body" className="container">
@@ -41,7 +32,7 @@ class App extends React.Component {
                                 <Home />
                             </Route>
                             <Route path="/create" >
-                                <Create name={this.state.create.name} dice={this.state.create.dice} author={this.state.create.author} updateCreateSet={this.updateCreateSet}/>
+                                <Create name={this.props.create.name} dice={this.props.create.dice} author={this.props.create.author} updateCreateSet={this.updateCreateSet}/>
                             </Route>
                             <Route path="/browse" component={Browse} exact />
                             <Route path="/browse/:id" component={View} />
@@ -53,4 +44,9 @@ class App extends React.Component {
     }
 }
 
-export default App;
+AppServer.propTypes = {
+    create:PropTypes.object.isRequired,
+    url:PropTypes.string.isRequired,
+};
+
+export default AppServer;

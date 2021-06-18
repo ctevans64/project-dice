@@ -5,79 +5,60 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 class EditDice extends React.Component {
 
-    //Push props to state to try and fix bug with elements not being removed
-    constructor(props) {
-        super();
-        this.state = {
-            dieIndex: props.dieIndex,
-            dieName: props.dieName,
-            dieSides: props.dieSides,
-        };
-    }
-
     changeSide = (index, event) => {
-        let sides = this.state.dieSides;
+        let sides = this.props.dieSides;
         sides[index] = event.target.value;
-        this.setState({
-            dieSides: sides,
-        });
-        this.state.updateSides(this.state.dieIndex, sides);
+        this.props.updateSides(this.props.dieIndex, sides);
     };
 
     addSide = () => {
-        let sides = this.state.dieSides;
+        let sides = this.props.dieSides;
         sides.push("New Side");
-        this.setState({
-            dieSides: sides,
-        });
-        this.state.updateSides(this.state.dieIndex, sides);
+        this.props.updateSides(this.props.dieIndex, sides);
     };
 
     removeSide = (index) => {
-        let sides = this.state.dieSides;
+        let sides = this.props.dieSides;
         sides.splice(index, 1);
-        this.setState({
-            dieSides: sides,
-        });
-        this.state.updateSides(this.state.dieIndex, sides);
+        this.props.updateSides(this.props.dieIndex, sides);
     };
 
     changeName = (event) => {
-        this.setState({
-            dieName: event.target.value,
-        });
-        this.state.updateDieName(event.target.value);
+        this.props.updateDieName(this.props.dieIndex, event.target.value);
     };
 
     render() {
         return (
             <div className="EditDice accordion-item">
-                <h2 className="accordion-header" id={`headingDie_${this.state.dieIndex}`}>
-                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapseDie_${this.state.dieIndex}`} aria-expanded="true" aria-controls={`collapseDie_${this.state.dieIndex}`}>
-                        {this.state.dieName}
+                <h2 className="accordion-header" id={`headingDie_${this.props.dieIndex}`}>
+                    <button className={`accordion-button ${(this.props.dieIndex === 0) ? "" : "collapsed"}`} type="button" data-bs-toggle="collapse" data-bs-target={`#collapseDie_${this.props.dieIndex}`} aria-expanded={(this.props.dieIndex === 0) ? "true" : "false"} aria-controls={`collapseDie_${this.props.dieIndex}`}>
+                        {this.props.dieName}
                     </button>
                 </h2>
-                <div id={`collapseDie_${this.state.dieIndex}`} className={`accordion-collapse collapse ${(this.state.dieIndex === 0) ? "show" : ""}`} aria-labelledby={`headingDie_${this.state.dieIndex}`} data-bs-parent="#editDice">
+                <div id={`collapseDie_${this.props.dieIndex}`} className={`accordion-collapse collapse ${(this.props.dieIndex === 0) ? "show" : ""}`} aria-labelledby={`headingDie_${this.props.dieIndex}`} data-bs-parent="#editDice">
                     <div className="accordion-body">
                         <div className="mb-3">
-                            <label htmlFor={`nameEdit_${this.state.dieIndex}`} className="form-label">Die Name:</label>
-                            <input type="text" className="form-control" id={`nameEdit_${this.state.dieIndex}`} value={this.state.dieName} onChange={this.changeName} />
+                            <label htmlFor={`nameEdit_${this.props.dieIndex}`} className="form-label">Die Name:</label>
+                            <input type="text" className="form-control" id={`nameEdit_${this.props.dieIndex}`} value={this.props.dieName} onChange={this.changeName} />
                         </div>
                         <hr />
-                        {this.state.dieSides.map( (side, sideIndex) => (
+                        {this.props.dieSides.map( (side, sideIndex) => (
                             <div className="mb-3" key={sideIndex}>
-                                <label htmlFor={`sideEdit_${this.state.dieIndex}_${sideIndex}`} className="form-label">Side {sideIndex+1}</label>
+                                <label htmlFor={`sideEdit_${this.props.dieIndex}_${sideIndex}`} className="form-label">Side {sideIndex+1}</label>
                                 <div className="row g-3">
-                                    <div className="col-11">
-                                        <input type="text" className="form-control" id={`sideEdit_${this.state.dieIndex}_${side}`} value={side} onChange={(event) => this.changeSide(sideIndex, event) } />
+                                    <div className="col-10">
+                                        <input type="text" className="form-control" id={`sideEdit_${this.props.dieIndex}_${side}`} value={side} onChange={(event) => this.changeSide(sideIndex, event) } />
                                     </div>
-                                    <div className="col-1">
-                                        <button type="button" className="btn btn-danger"><FontAwesomeIcon icon={faTimesCircle} onClick={() => {this.removeSide(sideIndex)}}/></button>
+                                    <div className="col-2">
+                                        <button type="button" className="btn btn-danger" onClick={() => {this.removeSide(sideIndex)}} >
+                                            <FontAwesomeIcon icon={faTimesCircle} />
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         ))}
-                        <button type="button" className="btn" onClick={this.addSide}>New Side</button>
+                        <button type="button" className="btn btn-primary me-1" onClick={this.addSide}>Add new Side</button>
+                        <button type="button" className="btn btn-danger" onClick={() => this.props.removeDice(this.props.dieIndex)}>Remove Dice</button>
                     </div>
                 </div>
             </div>
@@ -91,6 +72,7 @@ EditDice.propTypes = {
     dieSides: PropTypes.array.isRequired,
     updateDieName: PropTypes.func.isRequired,
     updateSides: PropTypes.func.isRequired,
+    removeDice: PropTypes.func.isRequired,
 };
 
 export default EditDice;
