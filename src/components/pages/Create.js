@@ -1,11 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router';
 
 import EditDice from "../EditDice";
 import {saveCreate, publishCreate} from '../../api';
 import ViewSet from '../ViewSet';
 
 class Create extends React.Component {
+
+    state = {
+        runValidation: false,
+        serverError: false,
+        redirect: false,
+        redirectTo: ""
+    }
 
     //Pass updated set up to app level
     changeName = (event) => {
@@ -67,16 +75,40 @@ class Create extends React.Component {
     };
 
     publish = () => {
-        //Save to database
-        publishCreate({
-            name: this.props.name,
-            author: this.props.author,
-            dice: this.props.dice
-        }).then((response)=> {
-            console.log(response);
+        //vlaidate form
+        this.setState({
+            runValidation: true
         });
-        //Clear set from session
-        //Navigate to permalink
+        if(this.props.name !== "" && this.props.author !== ""){
+            //Save to database
+            publishCreate({
+                name: this.props.name,
+                author: this.props.author,
+                dice: this.props.dice
+            }).then((response)=> {
+                //Valid response
+                if("_id" in response){
+                    //Clear set
+                    this.props.updateCreateSet({
+                        name: "",
+                        author: this.props.author,
+                        dice: []
+                    });
+                    //Navigate to permalink
+                    this.setState({
+                        redirect: true,
+                        redirectTo: `/browse/${response._id}`,
+                    });
+                //Invalid response
+                }else{
+                    this.setState({
+                        serverError: true
+                    });
+                }
+            });
+        }
+
+        
     }
 
     componentWillUnmount(){
@@ -120,22 +152,33 @@ class Create extends React.Component {
 
                     <div id="publish" className="mt-3">
                         <h3>Publish:</h3>
-                        <p>If you wanted to publish your set to share it with others, please add the additional info Below.</p>
+                        <p>If you wanted to publish your set to share it with others, please add the additional info below.</p>
 
                         <div className="mb-3">
                             <label htmlFor="dieName" className="form-label">Set Name</label>
-                            <input type="text" className="form-control" id="dieName" aria-describedby="dieNameHelp" value={this.props.name} onChange={this.changeName}/>
+                            <input type="text" className={`form-control ${(this.state.runValidation && this.props.name === "") ? "is-invalid" : "" }`} id="dieName" aria-describedby="dieNameHelp authorNameFeedback" value={this.props.name} onChange={this.changeName}/>
+                            <div id="authorNameFeedback" className="invalid-feedback">
+                                Please provide a name for the set of dice.
+                            </div>
                             <div id="dieNameHelp" className="form-text">Here you can give your dice set a theme or title that helps others identify what it is for.</div>
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor="authorName" className="form-label">Your Name</label>
-                            <input type="text" className="form-control" id="authorName" value={this.props.author} onChange={this.changeAuthor}/>
+                            <input type="text" className={`form-control ${(this.state.runValidation && this.props.author === "") ? "is-invalid" : "" }`} id="authorName" aria-describedby="authorNameFeedback" value={this.props.author} onChange={this.changeAuthor}/>
+                            <div id="authorNameFeedback" className="invalid-feedback">
+                                Please provide your name.
+                            </div>
                         </div>
+
+                        {(this.state.serverError) ? (<div className="mb-3"><p className="text-danger">An error occured while processing your request. Please try again later.</p></div>) : ""}
+                        
 
                         <div className="mb-3">
                             <button type="button" className="btn btn-success btn-lg" onClick={this.publish}>Publish</button>
                         </div>
+
+                        {(this.state.redirect) ? (<Redirect push to={this.state.redirectTo} />) : ""}
                     </div>
                 </form>
             </div>

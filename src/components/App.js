@@ -3,8 +3,6 @@ import {
     BrowserRouter as Router,
     Route,
     Switch,
-    URLSearchParams,
-    useLocation
 } from 'react-router-dom'
 
 import Header from './Header';

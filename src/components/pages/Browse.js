@@ -17,7 +17,7 @@ class Browse extends React.Component {
         return (
             <div className="Browse">
                 <p>Browse content here</p>
-                <Link to="/browse/60cd02c756a631410420e420">60cd02c756a631410420e420</Link>
+                <Link to="/browse/60cf6d46bfb05b2e0c23c1da">60cf6d46bfb05b2e0c23c1da</Link>
             </div>
         );
     }

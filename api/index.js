@@ -76,12 +76,24 @@ router.post('/publishCreate', (req, res) => {
         res.status(400).send("Invalid set format.");
     }else{
         // Save to database
-        mdb.collection("sets").insertOne({ set }).then( result => {
+        mdb.collection("sets").insertOne({ ...set }).then( result => {
             res.send({_id: result.insertedId});
         }).catch( (error) => {
             console.error(error);
             res.status(500).send("Error inserting new set.");
         });
+    }
+});
+
+
+router.post('/getSet', (req, res) => {
+    if("_id" in req.body){
+        mdb.collection("sets").findOne({_id: ObjectID(req.body._id)}).then((result) => {
+            console.log(result);
+            res.send(result);
+        });
+    }else{
+        res.send({});
     }
 });
 

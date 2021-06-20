@@ -10,5 +10,14 @@ export const publishCreate = (set) => {
         .then((response) => {return response.data})
 }
 
+export const getSet = (_id) => {
+    return axios.post(`/api/getSet`, {_id})
+        .then((response) => {
+            return response.data
+        }).catch(() => {
+            return {};
+        });
+};
+
 
 // TODO: Ajax calls from front end to back end

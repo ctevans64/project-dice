@@ -83,7 +83,7 @@ class Home extends React.Component {
     
                 <p>I created this site to test my ability to make a full-stack JavaScript application with a React front-end. It was inspired by Atomic Shrimp's <a href="https://www.youtube.com/watch?v=NBdVpiWUKhU" target="_blank">Invention Dice</a>.</p>
     
-                <p>The basic premise is that randomness can be a part of the creative process. By rolling dice with sides grouped into categories you can be prompted with a unique combination. Below is the dice from Atomic Shrimp's video, but you can customize it by going to <Link to="/create">Create Set</Link>. Unlike real dice project-dice can have any number of sides, and you can add or remove as many dice as you wish.</p>
+                <p>The basic premise is that randomness can be a part of the creative process. By rolling dice with sides grouped into categories you can be prompted with a unique combination. Below is the dice from Atomic Shrimp's video, but you can customize it by going to <Link to="/create">Create Set</Link>. Unlike real dice, my project-dice can have any number of sides, and you can add or remove as many dice as you wish.</p>
     
                 <ViewSet set={this.state.invention} />
             </div>
