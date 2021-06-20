@@ -89,11 +89,35 @@ router.post('/publishCreate', (req, res) => {
 router.post('/getSet', (req, res) => {
     if("_id" in req.body){
         mdb.collection("sets").findOne({_id: ObjectID(req.body._id)}).then((result) => {
-            console.log(result);
             res.send(result);
         });
     }else{
         res.send({});
+    }
+});
+router.post('/getSets', (req, res) => {
+    if("query" in req.body){
+        let query = {};
+        if(req.body.query){
+            query = {
+                $or: [
+                    {"name": RegExp(`.*${req.body.query}.*`)},
+                    {"dice.name": RegExp(`.*${req.body.query}.*`)},
+                    {"dice.sides": RegExp(`.*${req.body.query}.*`)},
+                ]            
+            }
+        }
+
+        mdb.collection("sets").find(query).toArray().then((result) => {
+            if(result){
+                res.send(result);
+            }else{
+                res.send([]);
+            }
+            
+        });
+    }else{
+        res.send([]);
     }
 });
 

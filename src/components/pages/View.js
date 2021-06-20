@@ -4,14 +4,16 @@ import ViewSet from '../ViewSet';
 
 class View extends React.Component {
     state = {
-        set: {}
+        set: {},
+        loading: true
     }
 
     componentDidMount(){
         let _id = this.props.match.params.id;
         getSet(_id).then((response) => {
             this.setState({
-                set:response
+                set:response,
+                loading: false
             });
         });
     }
@@ -21,10 +23,14 @@ class View extends React.Component {
 
         return (
             <div className="View" className="mt-3">
-                {("_id" in this.state.set) ? <ViewSet set={this.state.set} /> : (
+                {(this.state.loading) ? <p>Loading...</p> : (
                     <>
-                        <h3>Not Found</h3>
-                        <p>The set you specified was not found.</p>
+                        {("_id" in this.state.set) ? <ViewSet set={this.state.set} /> : (
+                            <>
+                                <h3>Not Found</h3>
+                                <p>The set you specified was not found.</p>
+                            </>
+                        )}
                     </>
                 )}
             </div>

@@ -19,5 +19,14 @@ export const getSet = (_id) => {
         });
 };
 
+export const getSets = (query) => {
+    return axios.post(`/api/getSets`, {query})
+        .then((response) => {
+            return response.data
+        }).catch(() => {
+            return [];
+        });
+};
+
 
 // TODO: Ajax calls from front end to back end

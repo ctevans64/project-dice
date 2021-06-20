@@ -17,11 +17,14 @@ class ViewSet extends React.Component {
         for(const i in this.props.set.dice){
             selected[i] = Math.ceil(Math.random()*this.props.set.dice[i].sides.length);
         }
-        this.setState({
-            selected
-        });
+        this.setState({selected});
     }
 
+    changeDie(die, event){
+        let selected = this.state.selected;
+        selected[die] = event.target.value;
+        this.setState({selected});
+    }
 
     render() {
         let headertext = (
@@ -38,7 +41,7 @@ class ViewSet extends React.Component {
                         <div key={index}>
                             <div className="mb-3">
                                 <label htmlFor={`nameEdit_${this.props.set.name}_${this.props.set.author}_${index}`} className="form-label">{die.name}:</label>
-                                <select className="form-select" id={`dieSelect_${this.props.set.name}_${this.props.set.author}_${index}`} value={this.state.selected[index]}>
+                                <select className="form-select" id={`dieSelect_${this.props.set.name}_${this.props.set.author}_${index}`} value={this.state.selected[index]} onChange={(event) => this.changeDie(index, event)}>
                                     {die.sides.map( (side, sideIndex) => (
                                         <option key={sideIndex} value={sideIndex} >{side}</option>
                                     ))}
