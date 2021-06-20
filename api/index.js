@@ -121,8 +121,4 @@ router.post('/getSets', (req, res) => {
     }
 });
 
-
-
-// TODO: Add API backend here
-
 export default router;
