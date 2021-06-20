@@ -6,7 +6,9 @@
   "scripts": {
     "test": "jest",
     "dev:server": "nodemon --exec babel-node server.js --ignore public/",
-    "dev:bundler": "webpack -w --mode=\"development\""
+    "dev:bundler": "webpack -w --mode=\"development\"",
+    "start": "nodemon --exec babel-node server.js --ignore public/",
+    "dev:bundler-prod": "webpack -w --mode=\"production\""
   },
   "repository": {
     "type": "git",
